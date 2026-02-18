@@ -1,0 +1,6 @@
+Place light.png and dark.png screenshots here.
+
+These are referenced in pubspec.yaml under the `screenshots` section
+and will be displayed on pub.dev.
+
+Recommended size: ~540×960 px (portrait phone).

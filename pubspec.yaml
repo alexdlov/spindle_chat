@@ -1,0 +1,39 @@
+name: spindle_chat
+description: >
+  Composable, themeable chat UI for Flutter.
+  Sealed message types, controller-driven state, InheritedWidget DI,
+  animated list with date separators — no codegen, no heavy deps.
+version: 0.1.0
+
+homepage: https://github.com/user/spindle_chat
+repository: https://github.com/user/spindle_chat
+issue_tracker: https://github.com/user/spindle_chat/issues
+topics:
+  - chat
+  - ui
+  - messaging
+  - widgets
+
+# screenshots:
+#   - description: 'Light theme chat example'
+#     path: screenshots/light.png
+#   - description: 'Dark theme chat example'
+#     path: screenshots/dark.png
+
+environment:
+  sdk: '>=3.7.0 <4.0.0'
+  flutter: '>=3.29.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  meta: ^1.15.0
+  intl: ^0.20.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
