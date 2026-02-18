@@ -5,9 +5,9 @@ description: >
   animated list with date separators — no codegen, no heavy deps.
 version: 0.1.0
 
-homepage: https://github.com/user/spindle_chat
-repository: https://github.com/user/spindle_chat
-issue_tracker: https://github.com/user/spindle_chat/issues
+homepage: https://github.com/alexdlov/spindle_chat
+repository: https://github.com/alexdlov/spindle_chat
+issue_tracker: https://github.com/alexdlov/spindle_chat/issues
 topics:
   - chat
   - ui
