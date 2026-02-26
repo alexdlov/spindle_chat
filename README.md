@@ -2,6 +2,7 @@
 
 Composable, themeable chat UI for Flutter.
 
+[![pub package](https://img.shields.io/pub/v/spindle_chat.svg)](https://pub.dev/packages/spindle_chat)
 [![Dart](https://img.shields.io/badge/Dart-3.7+-blue)](https://dart.dev)
 [![Flutter](https://img.shields.io/badge/Flutter-3.29+-02569B)](https://flutter.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
