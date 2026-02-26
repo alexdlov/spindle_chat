@@ -52,6 +52,19 @@ sealed class ChatMessage {
     this.metadata,
   });
 
+  /// Deserialize a message from JSON.
+  factory ChatMessage.fromJson(Map<String, Object?> json) {
+    final type = json['type'] as String?;
+    return switch (type) {
+      'text' => TextMessage._fromJson(json),
+      'image' => ImageMessage._fromJson(json),
+      'file' => FileMessage._fromJson(json),
+      'system' => SystemMessage._fromJson(json),
+      'custom' => CustomMessage._fromJson(json),
+      _ => throw FormatException('Unknown message type: $type', json),
+    };
+  }
+
   /// Unique message identifier.
   final MessageId id;
 
@@ -93,25 +106,11 @@ sealed class ChatMessage {
   /// Serialize this message to JSON.
   Map<String, Object?> toJson();
 
-  /// Deserialize a message from JSON.
-  factory ChatMessage.fromJson(Map<String, Object?> json) {
-    final type = json['type'] as String?;
-    return switch (type) {
-      'text' => TextMessage._fromJson(json),
-      'image' => ImageMessage._fromJson(json),
-      'file' => FileMessage._fromJson(json),
-      'system' => SystemMessage._fromJson(json),
-      'custom' => CustomMessage._fromJson(json),
-      _ => throw FormatException('Unknown message type: $type', json),
-    };
-  }
-
   @override
   int get hashCode => id.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) || (other is ChatMessage && id == other.id);
+  bool operator ==(Object other) => identical(this, other) || (other is ChatMessage && id == other.id);
 }
 
 // ---------------------------------------------------------------------------
@@ -134,17 +133,12 @@ final class TextMessage extends ChatMessage {
     super.metadata,
   });
 
-  /// The text content of the message.
-  final String text;
-
   factory TextMessage._fromJson(Map<String, Object?> json) => TextMessage(
     id: json['id'] as MessageId,
     authorId: json['authorId'] as AuthorId,
     createdAt: DateTime.parse(json['createdAt'] as String),
     text: json['text'] as String,
-    status: ChatMessageStatus.values.byName(
-      json['status'] as String? ?? 'sent',
-    ),
+    status: ChatMessageStatus.values.byName(json['status'] as String? ?? 'sent'),
     replyToMessageId: json['replyToMessageId'] as MessageId?,
     updatedAt: switch (json['updatedAt']) {
       final String v => DateTime.parse(v),
@@ -152,6 +146,9 @@ final class TextMessage extends ChatMessage {
     },
     metadata: json['metadata'] as Map<String, Object?>?,
   );
+
+  /// The text content of the message.
+  final String text;
 
   @override
   TextMessage copyWith({
@@ -210,6 +207,24 @@ final class ImageMessage extends ChatMessage {
     super.metadata,
   });
 
+  factory ImageMessage._fromJson(Map<String, Object?> json) => ImageMessage(
+    id: json['id'] as MessageId,
+    authorId: json['authorId'] as AuthorId,
+    createdAt: DateTime.parse(json['createdAt'] as String),
+    imageUrl: json['imageUrl'] as String,
+    caption: json['caption'] as String?,
+    width: (json['width'] as num?)?.toDouble(),
+    height: (json['height'] as num?)?.toDouble(),
+    thumbUrl: json['thumbUrl'] as String?,
+    status: ChatMessageStatus.values.byName(json['status'] as String? ?? 'sent'),
+    replyToMessageId: json['replyToMessageId'] as MessageId?,
+    updatedAt: switch (json['updatedAt']) {
+      final String v => DateTime.parse(v),
+      _ => null,
+    },
+    metadata: json['metadata'] as Map<String, Object?>?,
+  );
+
   /// URL of the image.
   final String imageUrl;
 
@@ -224,26 +239,6 @@ final class ImageMessage extends ChatMessage {
 
   /// URL of the thumbnail preview.
   final String? thumbUrl;
-
-  factory ImageMessage._fromJson(Map<String, Object?> json) => ImageMessage(
-    id: json['id'] as MessageId,
-    authorId: json['authorId'] as AuthorId,
-    createdAt: DateTime.parse(json['createdAt'] as String),
-    imageUrl: json['imageUrl'] as String,
-    caption: json['caption'] as String?,
-    width: (json['width'] as num?)?.toDouble(),
-    height: (json['height'] as num?)?.toDouble(),
-    thumbUrl: json['thumbUrl'] as String?,
-    status: ChatMessageStatus.values.byName(
-      json['status'] as String? ?? 'sent',
-    ),
-    replyToMessageId: json['replyToMessageId'] as MessageId?,
-    updatedAt: switch (json['updatedAt']) {
-      final String v => DateTime.parse(v),
-      _ => null,
-    },
-    metadata: json['metadata'] as Map<String, Object?>?,
-  );
 
   @override
   ImageMessage copyWith({
@@ -289,8 +284,7 @@ final class ImageMessage extends ChatMessage {
   };
 
   @override
-  String toString() =>
-      'ImageMessage{id: $id, author: $authorId, url: $imageUrl}';
+  String toString() => 'ImageMessage{id: $id, author: $authorId, url: $imageUrl}';
 }
 
 /// {@template file_message}
@@ -312,6 +306,23 @@ final class FileMessage extends ChatMessage {
     super.metadata,
   });
 
+  factory FileMessage._fromJson(Map<String, Object?> json) => FileMessage(
+    id: json['id'] as MessageId,
+    authorId: json['authorId'] as AuthorId,
+    createdAt: DateTime.parse(json['createdAt'] as String),
+    fileUrl: json['fileUrl'] as String,
+    fileName: json['fileName'] as String,
+    fileSize: json['fileSize'] as int?,
+    mimeType: json['mimeType'] as String?,
+    status: ChatMessageStatus.values.byName(json['status'] as String? ?? 'sent'),
+    replyToMessageId: json['replyToMessageId'] as MessageId?,
+    updatedAt: switch (json['updatedAt']) {
+      final String v => DateTime.parse(v),
+      _ => null,
+    },
+    metadata: json['metadata'] as Map<String, Object?>?,
+  );
+
   /// URL to download the file.
   final String fileUrl;
 
@@ -323,25 +334,6 @@ final class FileMessage extends ChatMessage {
 
   /// MIME type of the file.
   final String? mimeType;
-
-  factory FileMessage._fromJson(Map<String, Object?> json) => FileMessage(
-    id: json['id'] as MessageId,
-    authorId: json['authorId'] as AuthorId,
-    createdAt: DateTime.parse(json['createdAt'] as String),
-    fileUrl: json['fileUrl'] as String,
-    fileName: json['fileName'] as String,
-    fileSize: json['fileSize'] as int?,
-    mimeType: json['mimeType'] as String?,
-    status: ChatMessageStatus.values.byName(
-      json['status'] as String? ?? 'sent',
-    ),
-    replyToMessageId: json['replyToMessageId'] as MessageId?,
-    updatedAt: switch (json['updatedAt']) {
-      final String v => DateTime.parse(v),
-      _ => null,
-    },
-    metadata: json['metadata'] as Map<String, Object?>?,
-  );
 
   @override
   FileMessage copyWith({
@@ -384,8 +376,7 @@ final class FileMessage extends ChatMessage {
   };
 
   @override
-  String toString() =>
-      'FileMessage{id: $id, author: $authorId, file: $fileName}';
+  String toString() => 'FileMessage{id: $id, author: $authorId, file: $fileName}';
 }
 
 /// {@template system_message}
@@ -393,15 +384,8 @@ final class FileMessage extends ChatMessage {
 /// {@endtemplate}
 final class SystemMessage extends ChatMessage {
   /// {@macro system_message}
-  const SystemMessage({
-    required super.id,
-    required super.createdAt,
-    required this.text,
-    super.metadata,
-  }) : super(authorId: '');
-
-  /// The system message text.
-  final String text;
+  const SystemMessage({required super.id, required super.createdAt, required this.text, super.metadata})
+    : super(authorId: '');
 
   factory SystemMessage._fromJson(Map<String, Object?> json) => SystemMessage(
     id: json['id'] as MessageId,
@@ -410,6 +394,9 @@ final class SystemMessage extends ChatMessage {
     metadata: json['metadata'] as Map<String, Object?>?,
   );
 
+  /// The system message text.
+  final String text;
+
   @override
   SystemMessage copyWith({
     String? text,
@@ -417,12 +404,7 @@ final class SystemMessage extends ChatMessage {
     MessageId? replyToMessageId,
     DateTime? updatedAt,
     Map<String, Object?>? metadata,
-  }) => SystemMessage(
-    id: id,
-    createdAt: createdAt,
-    text: text ?? this.text,
-    metadata: metadata ?? this.metadata,
-  );
+  }) => SystemMessage(id: id, createdAt: createdAt, text: text ?? this.text, metadata: metadata ?? this.metadata);
 
   @override
   Map<String, Object?> toJson() => <String, Object?>{
@@ -457,9 +439,7 @@ final class CustomMessage extends ChatMessage {
     id: json['id'] as MessageId,
     authorId: json['authorId'] as AuthorId,
     createdAt: DateTime.parse(json['createdAt'] as String),
-    status: ChatMessageStatus.values.byName(
-      json['status'] as String? ?? 'sent',
-    ),
+    status: ChatMessageStatus.values.byName(json['status'] as String? ?? 'sent'),
     replyToMessageId: json['replyToMessageId'] as MessageId?,
     updatedAt: switch (json['updatedAt']) {
       final String v => DateTime.parse(v),

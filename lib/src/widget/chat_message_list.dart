@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../model/chat_controller.dart';
-import '../model/chat_message.dart';
-import '../model/chat_operation.dart';
-import '../model/message_group_status.dart';
-import 'chat_message_bubble.dart';
-import 'chat_scope.dart';
+import 'package:spindle_chat/src/model/chat_controller.dart';
+import 'package:spindle_chat/src/model/chat_message.dart';
+import 'package:spindle_chat/src/model/chat_operation.dart';
+import 'package:spindle_chat/src/model/message_group_status.dart';
+import 'package:spindle_chat/src/widget/chat_message_bubble.dart';
+import 'package:spindle_chat/src/widget/chat_scope.dart';
 
 /// {@template chat_message_list}
 /// Scrollable list of chat messages with:
@@ -28,8 +28,7 @@ class ChatMessageList extends StatefulWidget {
 
 class _ChatMessageListState extends State<ChatMessageList> {
   final ScrollController _scrollController = ScrollController();
-  GlobalKey<SliverAnimatedListState> _listKey =
-      GlobalKey<SliverAnimatedListState>();
+  GlobalKey<SliverAnimatedListState> _listKey = GlobalKey<SliverAnimatedListState>();
 
   late List<ChatMessage> _messages;
   ChatController? _currentController;
@@ -102,11 +101,7 @@ class _ChatMessageListState extends State<ChatMessageList> {
 
   void _scrollToBottom() {
     if (!_scrollController.hasClients) return;
-    _scrollController.animateTo(
-      0,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    );
+    _scrollController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
   }
 
   // ---------------------------------------------------------------------------
@@ -119,10 +114,7 @@ class _ChatMessageListState extends State<ChatMessageList> {
     switch (operation) {
       case ChatOperationInsert(:final message, :final index):
         _messages.insert(index, message);
-        _listKey.currentState?.insertItem(
-          index,
-          duration: const Duration(milliseconds: 250),
-        );
+        _listKey.currentState?.insertItem(index, duration: const Duration(milliseconds: 250));
         // Auto-scroll when a new message arrives and user is near bottom.
         if (index == 0 && _scrollController.hasClients) {
           if (_scrollController.offset < 100) {
@@ -164,8 +156,7 @@ class _ChatMessageListState extends State<ChatMessageList> {
     final scope = ChatScope.of(context);
 
     if (_messages.isEmpty) {
-      return scope.builders.emptyStateBuilder?.call() ??
-          _DefaultEmptyState(text: scope.l10n.emptyStateText);
+      return scope.builders.emptyStateBuilder?.call() ?? _DefaultEmptyState(text: scope.l10n.emptyStateText);
     }
 
     return Stack(
@@ -179,20 +170,14 @@ class _ChatMessageListState extends State<ChatMessageList> {
               initialItemCount: _messages.length,
               itemBuilder: (context, index, animation) {
                 if (index >= _messages.length) return const SizedBox.shrink();
-                return _buildAnimatedItem(
-                  _messages[index],
-                  animation,
-                  index: index,
-                );
+                return _buildAnimatedItem(_messages[index], animation, index: index);
               },
             ),
             if (_isLoadingMore)
               const SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.all(16),
-                  child: Center(
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
+                  child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
                 ),
               ),
           ],
@@ -213,30 +198,18 @@ class _ChatMessageListState extends State<ChatMessageList> {
   // Item builders
   // ---------------------------------------------------------------------------
 
-  Widget _buildAnimatedItem(
-    ChatMessage message,
-    Animation<double> animation, {
-    int? index,
-  }) {
+  Widget _buildAnimatedItem(ChatMessage message, Animation<double> animation, {int? index}) {
     final resolvedIndex = index ?? _messages.indexOf(message);
     final groupStatus = _resolveGroupStatus(resolvedIndex);
     final showDate = _shouldShowDateSeparator(resolvedIndex);
 
-    final bubble = ChatMessageBubble(
-      message: message,
-      groupStatus: groupStatus,
-    );
+    final bubble = ChatMessageBubble(message: message, groupStatus: groupStatus);
 
     return SizeTransition(
       sizeFactor: CurvedAnimation(parent: animation, curve: Curves.easeOut),
       child: FadeTransition(
         opacity: animation,
-        child: Column(
-          children: [
-            if (showDate) _DateSeparator(date: message.createdAt),
-            bubble,
-          ],
-        ),
+        child: Column(children: [if (showDate) _DateSeparator(date: message.createdAt), bubble]),
       ),
     );
   }
@@ -252,22 +225,19 @@ class _ChatMessageListState extends State<ChatMessageList> {
 
     final message = _messages[index];
     final newerMessage = index > 0 ? _messages[index - 1] : null;
-    final olderMessage =
-        index < _messages.length - 1 ? _messages[index + 1] : null;
+    final olderMessage = index < _messages.length - 1 ? _messages[index + 1] : null;
 
     const groupThreshold = Duration(minutes: 2);
 
     final groupedWithNewer =
         newerMessage != null &&
         newerMessage.authorId == message.authorId &&
-        message.createdAt.difference(newerMessage.createdAt).abs() <
-            groupThreshold;
+        message.createdAt.difference(newerMessage.createdAt).abs() < groupThreshold;
 
     final groupedWithOlder =
         olderMessage != null &&
         olderMessage.authorId == message.authorId &&
-        olderMessage.createdAt.difference(message.createdAt).abs() <
-            groupThreshold;
+        olderMessage.createdAt.difference(message.createdAt).abs() < groupThreshold;
 
     return switch ((groupedWithOlder, groupedWithNewer)) {
       (false, false) => const MessageGroupStatus.single(),
@@ -282,9 +252,7 @@ class _ChatMessageListState extends State<ChatMessageList> {
     if (index == _messages.length - 1) return true;
     final current = _messages[index].createdAt;
     final older = _messages[index + 1].createdAt;
-    return current.year != older.year ||
-        current.month != older.month ||
-        current.day != older.day;
+    return current.year != older.year || current.month != older.month || current.day != older.day;
   }
 }
 
@@ -313,9 +281,7 @@ class _DateSeparator extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Text(
               _formatDate(date, scope.l10n),
-              style: theme.typography.labelSmall.copyWith(
-                color: theme.colors.timestamp,
-              ),
+              style: theme.typography.labelSmall.copyWith(color: theme.colors.timestamp),
             ),
           ),
           Expanded(child: Divider(color: theme.colors.divider, height: 1)),
@@ -352,18 +318,9 @@ class _DefaultEmptyState extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Icons.chat_bubble_outline,
-            size: 48,
-            color: theme.colors.timestamp,
-          ),
+          Icon(Icons.chat_bubble_outline, size: 48, color: theme.colors.timestamp),
           const SizedBox(height: 12),
-          Text(
-            text,
-            style: theme.typography.bodyMedium.copyWith(
-              color: theme.colors.timestamp,
-            ),
-          ),
+          Text(text, style: theme.typography.bodyMedium.copyWith(color: theme.colors.timestamp)),
         ],
       ),
     );
@@ -394,11 +351,7 @@ class _DefaultScrollToBottomButton extends StatelessWidget {
           customBorder: const CircleBorder(),
           child: Padding(
             padding: const EdgeInsets.all(8),
-            child: Icon(
-              Icons.keyboard_arrow_down,
-              color: theme.colors.onSurface,
-              size: 24,
-            ),
+            child: Icon(Icons.keyboard_arrow_down, color: theme.colors.onSurface, size: 24),
           ),
         ),
       ),

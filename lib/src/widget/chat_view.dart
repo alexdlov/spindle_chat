@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../model/chat_controller.dart';
-import '../model/chat_message.dart';
-import '../theme/chat_theme.dart';
-import 'chat_composer.dart';
-import 'chat_message_list.dart';
-import 'chat_scope.dart';
+import 'package:spindle_chat/src/model/chat_controller.dart';
+import 'package:spindle_chat/src/model/chat_message.dart';
+import 'package:spindle_chat/src/theme/chat_theme.dart';
+import 'package:spindle_chat/src/widget/chat_composer.dart';
+import 'package:spindle_chat/src/widget/chat_message_list.dart';
+import 'package:spindle_chat/src/widget/chat_scope.dart';
 
 /// {@template chat_view}
 /// The main chat widget composing the message list and the input bar.
@@ -83,9 +83,7 @@ class ChatView extends StatelessWidget {
       onLoadMore: onLoadMore,
       child: ColoredBox(
         color: resolvedTheme.colors.surface,
-        child: const Column(
-          children: [Expanded(child: ChatMessageList()), ChatComposer()],
-        ),
+        child: const Column(children: [Expanded(child: ChatMessageList()), ChatComposer()]),
       ),
     );
   }

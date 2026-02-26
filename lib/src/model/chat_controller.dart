@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
-import 'chat_message.dart';
-import 'chat_operation.dart';
+import 'package:spindle_chat/src/model/chat_message.dart';
+import 'package:spindle_chat/src/model/chat_operation.dart';
 
 /// {@template chat_controller}
 /// Interface for managing a list of chat messages.
@@ -49,13 +49,10 @@ abstract interface class ChatController implements Listenable {
 class InMemoryChatController extends ChangeNotifier implements ChatController {
   /// {@macro in_memory_chat_controller}
   InMemoryChatController({List<ChatMessage>? initialMessages})
-    : _messages = List<ChatMessage>.of(
-        initialMessages ?? const <ChatMessage>[],
-      );
+    : _messages = List<ChatMessage>.of(initialMessages ?? const <ChatMessage>[]);
 
   final List<ChatMessage> _messages;
-  final StreamController<ChatOperation> _operationsController =
-      StreamController<ChatOperation>.broadcast();
+  final StreamController<ChatOperation> _operationsController = StreamController<ChatOperation>.broadcast();
 
   /// Cached unmodifiable view, invalidated on mutation.
   List<ChatMessage>? _cachedView;
@@ -63,8 +60,7 @@ class InMemoryChatController extends ChangeNotifier implements ChatController {
 
   @override
   @nonVirtual
-  List<ChatMessage> get messages =>
-      _cachedView ??= List<ChatMessage>.unmodifiable(_messages);
+  List<ChatMessage> get messages => _cachedView ??= List<ChatMessage>.unmodifiable(_messages);
 
   @override
   @nonVirtual
@@ -100,9 +96,7 @@ class InMemoryChatController extends ChangeNotifier implements ChatController {
       }
       _messages.insert(index, message);
     }
-    _emit(
-      ChatOperation.set(messages: List<ChatMessage>.unmodifiable(_messages)),
-    );
+    _emit(ChatOperation.set(messages: List<ChatMessage>.unmodifiable(_messages)));
   }
 
   @override
@@ -110,13 +104,7 @@ class InMemoryChatController extends ChangeNotifier implements ChatController {
     final index = _messages.indexWhere((m) => m.id == oldMessage.id);
     if (index == -1) return;
     _messages[index] = newMessage;
-    _emit(
-      ChatOperation.update(
-        oldMessage: oldMessage,
-        newMessage: newMessage,
-        index: index,
-      ),
-    );
+    _emit(ChatOperation.update(oldMessage: oldMessage, newMessage: newMessage, index: index));
   }
 
   @override
@@ -132,9 +120,7 @@ class InMemoryChatController extends ChangeNotifier implements ChatController {
     _messages
       ..clear()
       ..addAll(messages);
-    _emit(
-      ChatOperation.set(messages: List<ChatMessage>.unmodifiable(_messages)),
-    );
+    _emit(ChatOperation.set(messages: List<ChatMessage>.unmodifiable(_messages)));
   }
 
   @override

@@ -10,23 +10,13 @@ class SpindleChatExampleApp extends StatelessWidget {
   const SpindleChatExampleApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'spindle_chat Example',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorSchemeSeed: Colors.indigo,
-        brightness: Brightness.light,
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-        colorSchemeSeed: Colors.indigo,
-        brightness: Brightness.dark,
-        useMaterial3: true,
-      ),
-      home: const ChatExamplePage(),
-    );
-  }
+  Widget build(BuildContext context) => MaterialApp(
+    title: 'spindle_chat Example',
+    debugShowCheckedModeBanner: false,
+    theme: ThemeData(colorSchemeSeed: Colors.indigo, brightness: Brightness.light, useMaterial3: true),
+    darkTheme: ThemeData(colorSchemeSeed: Colors.indigo, brightness: Brightness.dark, useMaterial3: true),
+    home: const ChatExamplePage(),
+  );
 }
 
 class ChatExamplePage extends StatefulWidget {
@@ -45,11 +35,7 @@ class _ChatExamplePageState extends State<ChatExamplePage> {
 
   final _authors = <String, ChatAuthor>{
     'user-1': const ChatAuthor(id: 'user-1', displayName: 'You'),
-    'user-2': const ChatAuthor(
-      id: 'user-2',
-      displayName: 'Alice',
-      avatarUrl: 'https://i.pravatar.cc/150?u=alice',
-    ),
+    'user-2': const ChatAuthor(id: 'user-2', displayName: 'Alice', avatarUrl: 'https://i.pravatar.cc/150?u=alice'),
   };
 
   @override
@@ -97,10 +83,7 @@ class _ChatExamplePageState extends State<ChatExamplePage> {
 
     // Simulate delivery after a short delay.
     Future.delayed(const Duration(seconds: 1), () {
-      _controller.updateMessage(
-        message,
-        message.copyWith(status: ChatMessageStatus.delivered),
-      );
+      _controller.updateMessage(message, message.copyWith(status: ChatMessageStatus.delivered));
     });
 
     // Simulate a reply from the other user.
@@ -135,21 +118,19 @@ class _ChatExamplePageState extends State<ChatExamplePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('spindle_chat Example')),
-      body: ChatView(
-        controller: _controller,
-        currentUserId: _currentUserId,
-        resolveAuthor: (id) => _authors[id],
-        onSend: _handleSend,
-        l10n: const ChatL10n(
-          inputHint: 'Type a message…',
-          emptyStateText: 'No messages yet',
-          today: 'Today',
-          yesterday: 'Yesterday',
-        ),
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('spindle_chat Example')),
+    body: ChatView(
+      controller: _controller,
+      currentUserId: _currentUserId,
+      resolveAuthor: (id) => _authors[id],
+      onSend: _handleSend,
+      l10n: const ChatL10n(
+        inputHint: 'Type a message…',
+        emptyStateText: 'No messages yet',
+        today: 'Today',
+        yesterday: 'Yesterday',
       ),
-    );
-  }
+    ),
+  );
 }

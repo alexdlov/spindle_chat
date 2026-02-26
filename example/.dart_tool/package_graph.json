@@ -34,22 +34,8 @@
       ]
     },
     {
-      "name": "intl",
-      "version": "0.20.2",
-      "dependencies": [
-        "clock",
-        "meta",
-        "path"
-      ]
-    },
-    {
       "name": "meta",
       "version": "1.17.0",
-      "dependencies": []
-    },
-    {
-      "name": "sky_engine",
-      "version": "0.0.0",
       "dependencies": []
     },
     {
@@ -58,8 +44,13 @@
       "dependencies": []
     },
     {
+      "name": "sky_engine",
+      "version": "0.0.0",
+      "dependencies": []
+    },
+    {
       "name": "material_color_utilities",
-      "version": "0.11.1",
+      "version": "0.13.0",
       "dependencies": [
         "collection"
       ]
@@ -71,17 +62,26 @@
     },
     {
       "name": "characters",
-      "version": "1.4.0",
+      "version": "1.4.1",
+      "dependencies": []
+    },
+    {
+      "name": "intl",
+      "version": "0.20.2",
+      "dependencies": [
+        "clock",
+        "meta",
+        "path"
+      ]
+    },
+    {
+      "name": "clock",
+      "version": "1.1.2",
       "dependencies": []
     },
     {
       "name": "path",
       "version": "1.9.1",
-      "dependencies": []
-    },
-    {
-      "name": "clock",
-      "version": "1.1.2",
       "dependencies": []
     }
   ],

@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
 
-import '../model/chat_author.dart';
-import '../model/chat_controller.dart';
-import '../model/chat_message.dart';
-import '../theme/chat_theme.dart';
+import 'package:spindle_chat/src/model/chat_author.dart';
+import 'package:spindle_chat/src/model/chat_controller.dart';
+import 'package:spindle_chat/src/model/chat_message.dart';
+import 'package:spindle_chat/src/theme/chat_theme.dart';
 
 /// Callback for resolving an author by their id.
 typedef ResolveAuthorCallback = ChatAuthor? Function(AuthorId authorId);
@@ -73,27 +73,25 @@ class ChatBuilders {
   });
 
   /// Override the default text message widget.
-  final Widget Function(TextMessage message, bool isMine)? textMessageBuilder;
+  final Widget Function(TextMessage message, {bool isMine})? textMessageBuilder;
 
   /// Override the default image message widget.
-  final Widget Function(ImageMessage message, bool isMine)? imageMessageBuilder;
+  final Widget Function(ImageMessage message, {bool isMine})? imageMessageBuilder;
 
   /// Override the default file message widget.
-  final Widget Function(FileMessage message, bool isMine)? fileMessageBuilder;
+  final Widget Function(FileMessage message, {bool isMine})? fileMessageBuilder;
 
   /// Override the default system message widget.
   final Widget Function(SystemMessage message)? systemMessageBuilder;
 
   /// Override the default custom message widget.
-  final Widget Function(CustomMessage message, bool isMine)?
-  customMessageBuilder;
+  final Widget Function(CustomMessage message, {bool isMine})? customMessageBuilder;
 
   /// Override the default message composer (input bar).
   final Widget Function(OnSendCallback onSend)? composerBuilder;
 
   /// Wrap each message in a custom container.
-  final Widget Function(ChatMessage message, bool isMine, Widget child)?
-  messageWrapperBuilder;
+  final Widget Function(ChatMessage message, {required Widget child, bool isMine})? messageWrapperBuilder;
 
   /// Override the default avatar widget.
   final Widget Function(ChatAuthor author)? avatarBuilder;
@@ -179,12 +177,9 @@ class ChatScope extends InheritedWidget {
   }
 
   /// Try to obtain the nearest [ChatScope], returns null if not found.
-  static ChatScope? maybeOf(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<ChatScope>();
+  static ChatScope? maybeOf(BuildContext context) => context.dependOnInheritedWidgetOfExactType<ChatScope>();
 
   @override
   bool updateShouldNotify(covariant ChatScope oldWidget) =>
-      controller != oldWidget.controller ||
-      currentUserId != oldWidget.currentUserId ||
-      theme != oldWidget.theme;
+      controller != oldWidget.controller || currentUserId != oldWidget.currentUserId || theme != oldWidget.theme;
 }

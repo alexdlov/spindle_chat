@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import 'chat_message.dart';
+import 'package:spindle_chat/src/model/chat_message.dart';
 
 /// {@template chat_author}
 /// Represents a chat participant.
@@ -9,6 +9,13 @@ import 'chat_message.dart';
 class ChatAuthor {
   /// {@macro chat_author}
   const ChatAuthor({required this.id, this.displayName, this.avatarUrl});
+
+  /// Deserialize from JSON.
+  factory ChatAuthor.fromJson(Map<String, Object?> json) => ChatAuthor(
+    id: json['id'] as AuthorId,
+    displayName: json['displayName'] as String?,
+    avatarUrl: json['avatarUrl'] as String?,
+  );
 
   /// Unique author identifier.
   final AuthorId id;
@@ -23,33 +30,20 @@ class ChatAuthor {
   String get effectiveName => displayName ?? id;
 
   /// Create a copy with the given fields replaced.
-  ChatAuthor copyWith({AuthorId? id, String? displayName, String? avatarUrl}) =>
-      ChatAuthor(
-        id: id ?? this.id,
-        displayName: displayName ?? this.displayName,
-        avatarUrl: avatarUrl ?? this.avatarUrl,
-      );
+  ChatAuthor copyWith({AuthorId? id, String? displayName, String? avatarUrl}) => ChatAuthor(
+    id: id ?? this.id,
+    displayName: displayName ?? this.displayName,
+    avatarUrl: avatarUrl ?? this.avatarUrl,
+  );
 
   /// Serialize to JSON.
-  Map<String, Object?> toJson() => <String, Object?>{
-    'id': id,
-    'displayName': displayName,
-    'avatarUrl': avatarUrl,
-  };
-
-  /// Deserialize from JSON.
-  factory ChatAuthor.fromJson(Map<String, Object?> json) => ChatAuthor(
-    id: json['id'] as AuthorId,
-    displayName: json['displayName'] as String?,
-    avatarUrl: json['avatarUrl'] as String?,
-  );
+  Map<String, Object?> toJson() => <String, Object?>{'id': id, 'displayName': displayName, 'avatarUrl': avatarUrl};
 
   @override
   int get hashCode => id.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) || (other is ChatAuthor && id == other.id);
+  bool operator ==(Object other) => identical(this, other) || (other is ChatAuthor && id == other.id);
 
   @override
   String toString() => 'ChatAuthor{id: $id, name: $effectiveName}';

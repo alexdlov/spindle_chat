@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import 'chat_message.dart';
+import 'package:spindle_chat/src/model/chat_message.dart';
 
 /// {@template chat_operation}
 /// Represents a single operation on the message list.
@@ -13,16 +13,10 @@ sealed class ChatOperation {
   const ChatOperation._();
 
   /// A message was inserted at [index].
-  const factory ChatOperation.insert({
-    required ChatMessage message,
-    required int index,
-  }) = ChatOperationInsert;
+  const factory ChatOperation.insert({required ChatMessage message, required int index}) = ChatOperationInsert;
 
   /// A message was removed from [index].
-  const factory ChatOperation.remove({
-    required ChatMessage message,
-    required int index,
-  }) = ChatOperationRemove;
+  const factory ChatOperation.remove({required ChatMessage message, required int index}) = ChatOperationRemove;
 
   /// A message was updated at [index].
   const factory ChatOperation.update({
@@ -32,14 +26,12 @@ sealed class ChatOperation {
   }) = ChatOperationUpdate;
 
   /// The entire message list was replaced.
-  const factory ChatOperation.set({required List<ChatMessage> messages}) =
-      ChatOperationSet;
+  const factory ChatOperation.set({required List<ChatMessage> messages}) = ChatOperationSet;
 }
 
 /// {@macro chat_operation}
 final class ChatOperationInsert extends ChatOperation {
-  const ChatOperationInsert({required this.message, required this.index})
-    : super._();
+  const ChatOperationInsert({required this.message, required this.index}) : super._();
 
   final ChatMessage message;
   final int index;
@@ -50,8 +42,7 @@ final class ChatOperationInsert extends ChatOperation {
 
 /// {@macro chat_operation}
 final class ChatOperationRemove extends ChatOperation {
-  const ChatOperationRemove({required this.message, required this.index})
-    : super._();
+  const ChatOperationRemove({required this.message, required this.index}) : super._();
 
   final ChatMessage message;
   final int index;
@@ -62,19 +53,14 @@ final class ChatOperationRemove extends ChatOperation {
 
 /// {@macro chat_operation}
 final class ChatOperationUpdate extends ChatOperation {
-  const ChatOperationUpdate({
-    required this.oldMessage,
-    required this.newMessage,
-    required this.index,
-  }) : super._();
+  const ChatOperationUpdate({required this.oldMessage, required this.newMessage, required this.index}) : super._();
 
   final ChatMessage oldMessage;
   final ChatMessage newMessage;
   final int index;
 
   @override
-  String toString() =>
-      'ChatOperation.update(index: $index, id: ${oldMessage.id})';
+  String toString() => 'ChatOperation.update(index: $index, id: ${oldMessage.id})';
 }
 
 /// {@macro chat_operation}

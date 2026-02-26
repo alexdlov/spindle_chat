@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'chat_scope.dart';
+import 'package:spindle_chat/src/widget/chat_scope.dart';
 
 /// {@template chat_composer}
 /// Message input bar at the bottom of the chat.
@@ -61,9 +61,7 @@ class _ChatComposerState extends State<ChatComposer> {
     return Container(
       decoration: BoxDecoration(
         color: theme.colors.surface,
-        border: Border(
-          top: BorderSide(color: theme.colors.divider, width: 0.5),
-        ),
+        border: Border(top: BorderSide(color: theme.colors.divider, width: 0.5)),
       ),
       child: SafeArea(
         top: false,
@@ -79,22 +77,15 @@ class _ChatComposerState extends State<ChatComposer> {
                     controller: _textController,
                     maxLines: null,
                     textInputAction: TextInputAction.newline,
-                    style: theme.typography.bodyLarge.copyWith(
-                      color: theme.colors.inputText,
-                    ),
+                    style: theme.typography.bodyLarge.copyWith(color: theme.colors.inputText),
                     decoration:
                         theme.inputDecoration ??
                         InputDecoration(
                           hintText: scope.l10n.inputHint,
-                          hintStyle: theme.typography.bodyLarge.copyWith(
-                            color: theme.colors.timestamp,
-                          ),
+                          hintStyle: theme.typography.bodyLarge.copyWith(color: theme.colors.timestamp),
                           filled: true,
                           fillColor: theme.colors.inputBackground,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 10,
-                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(24),
                             borderSide: BorderSide.none,
@@ -123,11 +114,7 @@ class _ChatComposerState extends State<ChatComposer> {
                               customBorder: const CircleBorder(),
                               child: Padding(
                                 padding: const EdgeInsets.all(10),
-                                child: Icon(
-                                  Icons.send,
-                                  color: theme.colors.sentText,
-                                  size: 20,
-                                ),
+                                child: Icon(Icons.send, color: theme.colors.sentText, size: 20),
                               ),
                             ),
                           ),

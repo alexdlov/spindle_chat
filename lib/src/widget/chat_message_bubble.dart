@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../model/chat_message.dart';
-import '../model/message_group_status.dart';
-import 'chat_scope.dart';
+import 'package:spindle_chat/src/model/chat_message.dart';
+import 'package:spindle_chat/src/model/message_group_status.dart';
+import 'package:spindle_chat/src/widget/chat_scope.dart';
 
 /// {@template chat_message_bubble}
 /// A single message bubble with avatar, username, content, and timestamp.
@@ -12,11 +12,7 @@ import 'chat_scope.dart';
 /// {@endtemplate}
 class ChatMessageBubble extends StatelessWidget {
   /// {@macro chat_message_bubble}
-  const ChatMessageBubble({
-    required this.message,
-    required this.groupStatus,
-    super.key,
-  });
+  const ChatMessageBubble({required this.message, required this.groupStatus, super.key});
 
   /// The message data to display.
   final ChatMessage message;
@@ -35,9 +31,7 @@ class ChatMessageBubble extends StatelessWidget {
     }
 
     final content = _buildBubbleContent(scope, isMine);
-    final wrapped =
-        scope.builders.messageWrapperBuilder?.call(message, isMine, content) ??
-        content;
+    final wrapped = scope.builders.messageWrapperBuilder?.call(message, isMine: isMine, child: content) ?? content;
 
     return Semantics(
       label: _semanticLabel(scope, isMine),
@@ -49,8 +43,7 @@ class ChatMessageBubble extends StatelessWidget {
           right: isMine ? 8 : 48,
         ),
         child: Row(
-          mainAxisAlignment:
-              isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
+          mainAxisAlignment: isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             if (!isMine && groupStatus.showTail) ...[
@@ -61,20 +54,13 @@ class ChatMessageBubble extends StatelessWidget {
             ],
             Flexible(
               child: Column(
-                crossAxisAlignment:
-                    isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                crossAxisAlignment: isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                 children: [
                   if (!isMine && groupStatus.showAuthor) _buildUsername(scope),
                   // Tap / long-press handlers
                   GestureDetector(
-                    onTap:
-                        scope.onMessageTap != null
-                            ? () => scope.onMessageTap!(message)
-                            : null,
-                    onLongPress:
-                        scope.onMessageLongPress != null
-                            ? () => scope.onMessageLongPress!(message)
-                            : null,
+                    onTap: scope.onMessageTap != null ? () => scope.onMessageTap!(message) : null,
+                    onLongPress: scope.onMessageLongPress != null ? () => scope.onMessageLongPress!(message) : null,
                     child: wrapped,
                   ),
                 ],
@@ -102,9 +88,7 @@ class ChatMessageBubble extends StatelessWidget {
           child: Text(
             sys.text,
             textAlign: TextAlign.center,
-            style: scope.theme.typography.bodySmall.copyWith(
-              color: scope.theme.colors.system,
-            ),
+            style: scope.theme.typography.bodySmall.copyWith(color: scope.theme.colors.system),
           ),
         ),
       ),
@@ -120,29 +104,20 @@ class ChatMessageBubble extends StatelessWidget {
 
     final child = switch (message) {
       final TextMessage m =>
-        scope.builders.textMessageBuilder?.call(m, isMine) ??
-            _DefaultTextContent(message: m, isMine: isMine),
+        scope.builders.textMessageBuilder?.call(m, isMine: isMine) ?? _DefaultTextContent(message: m, isMine: isMine),
       final ImageMessage m =>
-        scope.builders.imageMessageBuilder?.call(m, isMine) ??
-            _DefaultImageContent(message: m, isMine: isMine),
+        scope.builders.imageMessageBuilder?.call(m, isMine: isMine) ?? _DefaultImageContent(message: m, isMine: isMine),
       final FileMessage m =>
-        scope.builders.fileMessageBuilder?.call(m, isMine) ??
-            _DefaultFileContent(message: m, isMine: isMine),
-      final CustomMessage m =>
-        scope.builders.customMessageBuilder?.call(m, isMine) ??
-            const SizedBox.shrink(),
+        scope.builders.fileMessageBuilder?.call(m, isMine: isMine) ?? _DefaultFileContent(message: m, isMine: isMine),
+      final CustomMessage m => scope.builders.customMessageBuilder?.call(m, isMine: isMine) ?? const SizedBox.shrink(),
       SystemMessage() => const SizedBox.shrink(), // handled above
     };
 
-    final bgColor =
-        isMine ? theme.colors.sentBubble : theme.colors.receivedBubble;
+    final bgColor = isMine ? theme.colors.sentBubble : theme.colors.receivedBubble;
 
     return DecoratedBox(
       decoration: ShapeDecoration(color: bgColor, shape: _bubbleShape(isMine)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: child,
-      ),
+      child: Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8), child: child),
     );
   }
 
@@ -155,11 +130,7 @@ class ChatMessageBubble extends StatelessWidget {
     const s = Radius.circular(4);
 
     // (isMine, isFirst/single, isLast/single)
-    final (tl, tr, bl, br) = switch ((
-      isMine,
-      groupStatus.showAuthor,
-      groupStatus.showTail,
-    )) {
+    final (tl, tr, bl, br) = switch ((isMine, groupStatus.showAuthor, groupStatus.showTail)) {
       // Sent messages — tail = bottom-right
       (true, true, true) => (r, r, r, s), // single
       (true, true, false) => (r, r, r, s), // first
@@ -173,12 +144,7 @@ class ChatMessageBubble extends StatelessWidget {
     };
 
     return RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: tl,
-        topRight: tr,
-        bottomLeft: bl,
-        bottomRight: br,
-      ),
+      borderRadius: BorderRadius.only(topLeft: tl, topRight: tr, bottomLeft: bl, bottomRight: br),
     );
   }
 
@@ -204,14 +170,7 @@ class ChatMessageBubble extends StatelessWidget {
         backgroundColor: theme.colors.receivedBubble,
         backgroundImage: hasAvatar ? NetworkImage(avatarUrl) : null,
         child:
-            hasAvatar
-                ? null
-                : Text(
-                  initial,
-                  style: theme.typography.bodySmall.copyWith(
-                    color: theme.colors.onSurface,
-                  ),
-                ),
+            hasAvatar ? null : Text(initial, style: theme.typography.bodySmall.copyWith(color: theme.colors.onSurface)),
       ),
     );
   }
@@ -270,17 +229,13 @@ class _DefaultTextContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = ChatScope.of(context).theme;
-    final textColor =
-        isMine ? theme.colors.sentText : theme.colors.receivedText;
+    final textColor = isMine ? theme.colors.sentText : theme.colors.receivedText;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          message.text,
-          style: theme.typography.bodyLarge.copyWith(color: textColor),
-        ),
+        Text(message.text, style: theme.typography.bodyLarge.copyWith(color: textColor)),
         const SizedBox(height: 2),
         _MessageTimestamp(
           time: message.createdAt,
@@ -317,10 +272,7 @@ class _DefaultImageContent extends StatelessWidget {
                   (_, __, ___) => Container(
                     height: 100,
                     color: theme.colors.divider,
-                    child: Icon(
-                      Icons.broken_image,
-                      color: theme.colors.timestamp,
-                    ),
+                    child: Icon(Icons.broken_image, color: theme.colors.timestamp),
                   ),
             ),
           ),
@@ -348,8 +300,7 @@ class _DefaultFileContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = ChatScope.of(context).theme;
-    final textColor =
-        isMine ? theme.colors.sentText : theme.colors.receivedText;
+    final textColor = isMine ? theme.colors.sentText : theme.colors.receivedText;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -363,19 +314,14 @@ class _DefaultFileContent extends StatelessWidget {
             children: [
               Text(
                 message.fileName,
-                style: theme.typography.bodyMedium.copyWith(
-                  color: textColor,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: theme.typography.bodyMedium.copyWith(color: textColor, fontWeight: FontWeight.w500),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
               if (message.fileSize case final int size)
                 Text(
                   _formatFileSize(size),
-                  style: theme.typography.bodySmall.copyWith(
-                    color: textColor.withValues(alpha: 0.6),
-                  ),
+                  style: theme.typography.bodySmall.copyWith(color: textColor.withValues(alpha: 0.6)),
                 ),
             ],
           ),
@@ -399,12 +345,7 @@ class _DefaultFileContent extends StatelessWidget {
 // =============================================================================
 
 class _MessageTimestamp extends StatelessWidget {
-  const _MessageTimestamp({
-    required this.time,
-    required this.color,
-    this.status,
-    this.isEdited = false,
-  });
+  const _MessageTimestamp({required this.time, required this.color, this.status, this.isEdited = false});
 
   final DateTime time;
   final Color color;
@@ -421,19 +362,10 @@ class _MessageTimestamp extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (isEdited) ...[
-          Text(
-            'edited',
-            style: theme.typography.labelSmall.copyWith(
-              color: color,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
+          Text('edited', style: theme.typography.labelSmall.copyWith(color: color, fontStyle: FontStyle.italic)),
           const SizedBox(width: 4),
         ],
-        Text(
-          _timeFormat.format(time),
-          style: theme.typography.labelSmall.copyWith(color: color),
-        ),
+        Text(_timeFormat.format(time), style: theme.typography.labelSmall.copyWith(color: color)),
         if (status != null) ...[
           const SizedBox(width: 2),
           Icon(
