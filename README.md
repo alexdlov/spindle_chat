@@ -6,6 +6,18 @@ Composable, themeable chat UI for Flutter.
 [![Flutter](https://img.shields.io/badge/Flutter-3.29+-02569B)](https://flutter.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/alexdlov/spindle_chat/main/screenshots/home.png" width="200" />
+  <img src="https://raw.githubusercontent.com/alexdlov/spindle_chat/main/screenshots/basic_chat.png" width="200" />
+  <img src="https://raw.githubusercontent.com/alexdlov/spindle_chat/main/screenshots/message_types.png" width="200" />
+  <img src="https://raw.githubusercontent.com/alexdlov/spindle_chat/main/screenshots/theming_light.png" width="200" />
+</p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/alexdlov/spindle_chat/main/screenshots/theming_dark.png" width="200" />
+  <img src="https://raw.githubusercontent.com/alexdlov/spindle_chat/main/screenshots/custom_builders.png" width="200" />
+  <img src="https://raw.githubusercontent.com/alexdlov/spindle_chat/main/screenshots/attachment_sheet.png" width="200" />
+</p>
+
 ---
 
 ## Features
@@ -21,6 +33,7 @@ Composable, themeable chat UI for Flutter.
 - **Delivery status** — `sent`, `delivered`, `seen`, `error` indicators on outgoing messages.
 - **Edited indicator** — Shows "edited" label when `updatedAt != createdAt`.
 - **Pagination** — `onLoadMore` callback for lazy loading.
+- **Attachments** — `onAttachmentTap` callback for photo/file picker integration.
 - **No codegen, no heavy deps** — Only `meta` and `intl`.
 
 ---
@@ -243,6 +256,7 @@ Each outgoing message can carry a `MessageGroupStatus`:
 | Callback | Description |
 |----------|-------------|
 | `onSend` | User submits text from the composer |
+| `onAttachmentTap` | User taps the attachment button ("＋") |
 | `onMessageTap` | Tap on a message bubble |
 | `onMessageLongPress` | Long-press on a message bubble |
 | `onLoadMore` | Scrolled to top — load earlier messages |

@@ -14,11 +14,21 @@ topics:
   - messaging
   - widgets
 
-# screenshots:
-#   - description: 'Light theme chat example'
-#     path: screenshots/light.png
-#   - description: 'Dark theme chat example'
-#     path: screenshots/dark.png
+screenshots:
+  - description: 'Example app home screen'
+    path: screenshots/home.png
+  - description: 'Basic chat with delivery statuses'
+    path: screenshots/basic_chat.png
+  - description: 'All message types'
+    path: screenshots/message_types.png
+  - description: 'Light theme'
+    path: screenshots/theming_light.png
+  - description: 'Dark theme'
+    path: screenshots/theming_dark.png
+  - description: 'Custom builders'
+    path: screenshots/custom_builders.png
+  - description: 'Attachment picker'
+    path: screenshots/attachment_sheet.png
 
 environment:
   sdk: '>=3.7.0 <4.0.0'

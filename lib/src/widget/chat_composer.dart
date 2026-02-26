@@ -70,6 +70,23 @@ class _ChatComposerState extends State<ChatComposer> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              if (scope.onAttachmentTap case final onAttachmentTap?)
+                Semantics(
+                  label: 'Add attachment',
+                  button: true,
+                  child: Material(
+                    color: Colors.transparent,
+                    shape: const CircleBorder(),
+                    child: InkWell(
+                      onTap: onAttachmentTap,
+                      customBorder: const CircleBorder(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Icon(Icons.add, color: theme.colors.timestamp, size: 24),
+                      ),
+                    ),
+                  ),
+                ),
               Expanded(
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxHeight: 120),

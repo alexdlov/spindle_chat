@@ -20,6 +20,9 @@ typedef OnMessageLongPressCallback = void Function(ChatMessage message);
 /// Callback for loading earlier messages (pagination).
 typedef OnLoadMoreCallback = Future<void> Function();
 
+/// Callback invoked when the user taps the attachment button.
+typedef OnAttachmentTapCallback = void Function();
+
 /// {@template chat_l10n}
 /// Localization strings for the chat UI.
 ///
@@ -129,6 +132,7 @@ class ChatScope extends InheritedWidget {
     this.builders = const ChatBuilders(),
     this.l10n = const ChatL10n(),
     this.onSend,
+    this.onAttachmentTap,
     this.onMessageTap,
     this.onMessageLongPress,
     this.onLoadMore,
@@ -155,6 +159,9 @@ class ChatScope extends InheritedWidget {
 
   /// Called when the user sends a message.
   final OnSendCallback? onSend;
+
+  /// Called when the user taps the attachment button.
+  final OnAttachmentTapCallback? onAttachmentTap;
 
   /// Called when a message is tapped.
   final OnMessageTapCallback? onMessageTap;

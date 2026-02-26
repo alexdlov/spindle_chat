@@ -30,6 +30,7 @@ class ChatView extends StatelessWidget {
     this.builders = const ChatBuilders(),
     this.l10n = const ChatL10n(),
     this.onSend,
+    this.onAttachmentTap,
     this.onMessageTap,
     this.onMessageLongPress,
     this.onLoadMore,
@@ -57,6 +58,9 @@ class ChatView extends StatelessWidget {
   /// Called when the user sends a text message.
   final OnSendCallback? onSend;
 
+  /// Called when the user taps the attachment button.
+  final OnAttachmentTapCallback? onAttachmentTap;
+
   /// Called when a message is tapped.
   final OnMessageTapCallback? onMessageTap;
 
@@ -78,6 +82,7 @@ class ChatView extends StatelessWidget {
       builders: builders,
       l10n: l10n,
       onSend: onSend,
+      onAttachmentTap: onAttachmentTap,
       onMessageTap: onMessageTap,
       onMessageLongPress: onMessageLongPress,
       onLoadMore: onLoadMore,
